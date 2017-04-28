@@ -22,7 +22,12 @@ int JH_irc_send_message
    const char msg [const restrict static 1]
 );
 
-/* TODO */
+int JH_irc_send_action
+(
+   struct JH_irc irc [const restrict static 1],
+   const char msg [const restrict static 1]
+);
+
 void JH_irc_finalize (struct JH_irc irc [const restrict static 1]);
 
 int JH_irc_pre_select

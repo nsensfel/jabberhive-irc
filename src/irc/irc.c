@@ -41,6 +41,7 @@ int JH_irc_initialize
    irc->callbacks.event_dcc_send_req = JH_irc_handle_dcc_send_req_event;
 
    irc->session = irc_create_session(&(irc->callbacks));
+   irc_set_ctx(irc->session, (void *) irc);
 
    irc->params = params;
    irc->jh_net = jh_net;
@@ -59,7 +60,8 @@ int JH_irc_connect (struct JH_irc irc [const restrict static 1])
 {
    if (JH_parameters_get_irc_is_ipv6(irc->params))
    {
-      return
+      if
+      (
          irc_connect6
          (
             irc->session,
@@ -69,11 +71,23 @@ int JH_irc_connect (struct JH_irc irc [const restrict static 1])
             JH_parameters_get_irc_nick(irc->params),
             JH_parameters_get_irc_username(irc->params),
             JH_parameters_get_irc_realname(irc->params)
+         ) != 0
+      )
+      {
+         JH_FATAL
+         (
+            stderr,
+            "[IRC] Unable to attempt connection (IPv6): %s.\n",
+            irc_strerror(irc_errno(irc->session))
          );
+
+         return -1;
+      }
    }
    else
    {
-      return
+      if
+      (
          irc_connect
          (
             irc->session,
@@ -83,8 +97,26 @@ int JH_irc_connect (struct JH_irc irc [const restrict static 1])
             JH_parameters_get_irc_nick(irc->params),
             JH_parameters_get_irc_username(irc->params),
             JH_parameters_get_irc_realname(irc->params)
+         ) != 0
+      )
+      {
+         JH_FATAL
+         (
+            stderr,
+            "[IRC] Unable to attempt connection: %s.\n",
+            irc_strerror(irc_errno(irc->session))
          );
+
+         return -1;
+      }
    }
+
+   return 0;
+}
+
+void JH_irc_finalize (struct JH_irc irc [const restrict static 1])
+{
+   /* TODO */
 }
 
 void JH_irc_do_nothing

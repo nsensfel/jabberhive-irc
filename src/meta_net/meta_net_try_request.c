@@ -76,7 +76,12 @@ int JH_meta_net_handle_user_message
       (
          &(socket->out.data),
          &(socket->out.capacity),
-         string_size
+         (
+            string_size
+            + JH_META_NET_RLR_STRING_LENGTH
+            + 1 /* ' ' */
+            + 1 /* '\n' */
+         )
       )
       < 0
    )
@@ -87,13 +92,41 @@ int JH_meta_net_handle_user_message
    memcpy
    (
       (void *) socket->out.data,
+      (const void *) (JH_META_NET_RLR_STRING " "),
+      (
+         (
+            JH_META_NET_RLR_STRING_LENGTH
+            + 1 /* ' ' */
+         )
+         * sizeof(char)
+      )
+   );
+
+   memcpy
+   (
+      (void *)
+      (
+         socket->out.data
+         +
+         (
+            JH_META_NET_RLR_STRING_LENGTH
+            + 1 /* ' ' */
+         )
+      ),
       (const void *) string,
       (string_size * sizeof(char))
    );
 
-   socket->out.length = string_size;
-   socket->out.index = 0;
+   socket->out.length =
+      (
+         string_size
+         + JH_META_NET_RLR_STRING_LENGTH
+         + 1 /* ' ' */
+         + 1 /* '\n' */
+      );
 
+   socket->out.index = 0;
+   socket->out.data[socket->out.length - 1] = '\n';
    socket->has_request_in_progress = 1;
 
    return 0;
@@ -117,7 +150,14 @@ int JH_meta_net_handle_user_action
       (
          &(socket->out.data),
          &(socket->out.capacity),
-         (string_size + (JH_META_NET_ACTION_STRING_LENGTH + 1))
+         (
+            string_size
+            + JH_META_NET_RLR_STRING_LENGTH
+            + 1 /* ' ' */
+            + JH_META_NET_ACTION_STRING_LENGTH
+            + 1 /* ' ' */
+            + 1 /* '\n' */
+         )
       )
       < 0
    )
@@ -128,22 +168,53 @@ int JH_meta_net_handle_user_action
    memcpy
    (
       (void *) socket->out.data,
-      (const void *) JH_META_NET_ACTION_STRING,
-      (JH_META_NET_ACTION_STRING_LENGTH * sizeof(char))
+      (const void *)
+      (
+         JH_META_NET_RLR_STRING
+         " "
+         JH_META_NET_ACTION_STRING
+         " "
+      ),
+      (
+         (
+            JH_META_NET_RLR_STRING_LENGTH
+            + 1 /* ' ' */
+            + JH_META_NET_ACTION_STRING_LENGTH
+            + 1 /* ' ' */
+         )
+         * sizeof(char)
+      )
    );
-
-   socket->out.data[JH_META_NET_ACTION_STRING_LENGTH] = ' ';
 
    memcpy
    (
-      (void *) (socket->out.data + (JH_META_NET_ACTION_STRING_LENGTH + 1)),
+      (void *)
+      (
+         socket->out.data
+         +
+         (
+            JH_META_NET_RLR_STRING_LENGTH
+            + 1 /* ' ' */
+            + JH_META_NET_ACTION_STRING_LENGTH
+            + 1 /* ' ' */
+         )
+      ),
       (const void *) string,
       (string_size * sizeof(char))
    );
 
-   socket->out.length = string_size;
-   socket->out.index = 0;
+   socket->out.length =
+      (
+         string_size
+         + JH_META_NET_RLR_STRING_LENGTH
+         + 1 /* ' ' */
+         + JH_META_NET_ACTION_STRING_LENGTH
+         + 1 /* ' ' */
+         + 1 /* '\n' */
+      );
 
+   socket->out.index = 0;
+   socket->out.data[socket->out.length - 1] = '\n';
    socket->has_request_in_progress = 1;
 
    return 0;
@@ -188,13 +259,13 @@ int JH_meta_net_read
       read
       (
          socket->fd,
-         (&(socket->in.data) + socket->in.length),
+         (socket->in.data + socket->in.length),
          (size_t) JH_META_NET_READ_SIZE
       );
 
-   if (in_bytes_count < 0)
+   if (in_bytes_count <= 0)
    {
-      if (errno == EAGAIN)
+      if ((errno == EAGAIN) || (errno == EWOULDBLOCK))
       {
          errno = old_errno;
 
@@ -204,8 +275,9 @@ int JH_meta_net_read
       JH_ERROR
       (
          stderr,
-         "Unable to read from JabberHive socket: %s.",
-         strerror(errno)
+         "Unable to read from JabberHive (UNIX) socket: %s (errno: %d).",
+         strerror(errno),
+         errno
       );
 
       errno = old_errno;
@@ -216,7 +288,7 @@ int JH_meta_net_read
    errno = old_errno;
 
    /* Safe. */
-   socket->in.length += (size_t) in_bytes_count;
+   socket->in.length += (size_t) (in_bytes_count);
 
    while (socket->in.index < socket->in.length)
    {

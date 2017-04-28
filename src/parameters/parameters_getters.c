@@ -1,5 +1,21 @@
 #include "parameters.h"
 
+const int JH_parameters_get_print_additional_info
+(
+   const struct JH_parameters param [const restrict static 1]
+)
+{
+   return param->print_additional_info;
+}
+
+const int JH_parameters_get_print_chat
+(
+   const struct JH_parameters param [const restrict static 1]
+)
+{
+   return param->print_chat;
+}
+
 const char * JH_parameters_get_socket_name
 (
    const struct JH_parameters param [const restrict static 1]

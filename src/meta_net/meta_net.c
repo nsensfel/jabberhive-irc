@@ -33,7 +33,7 @@ static int open_socket
       JH_FATAL
       (
          stderr,
-         "Unable to create socket: %s.",
+         "Unable to create JabberHive (UNIX) socket: %s.",
          strerror(errno)
       );
 
@@ -62,7 +62,8 @@ static int open_socket
       JH_FATAL
       (
          stderr,
-         "Unable to connect to address: %s.",
+         "Unable to connect to JabberHive (UNIX) address \"%s\": %s",
+         socket_name,
          strerror(errno)
       );
 
@@ -82,7 +83,7 @@ static int open_socket
       JH_FATAL
       (
          stderr,
-         "Unable to get fd flag information for JabberHive socket: %s.",
+         "Unable to get fd flag information for JabberHive (UNIX) socket: %s.",
          strerror(errno)
       );
 
@@ -100,7 +101,7 @@ static int open_socket
       JH_FATAL
       (
          stderr,
-         "Unable to get fd flag information for JabberHive socket: %s.",
+         "Unable to get fd flag information for JabberHive (UNIX) socket: %s.",
          strerror(errno)
       );
 
@@ -154,5 +155,83 @@ void JH_meta_net_finalize
    struct JH_meta_net socket [const restrict static 1]
 )
 {
-   /* TODO */
+   if (socket->in.data != (char *) NULL)
+   {
+      free((void *) socket->in.data);
+      socket->in.data = (char *) NULL;
+   }
+
+   socket->in.capacity = 0;
+   socket->in.length = 0;
+   socket->in.index = 0;
+
+   if (socket->out.data != (char *) NULL)
+   {
+      free((void *) socket->out.data);
+      socket->out.data = (char *) NULL;
+   }
+
+   socket->out.capacity = 0;
+   socket->out.length = 0;
+   socket->out.index = 0;
+
+   if (socket->fd != -1)
+   {
+      close(socket->fd);
+      socket->fd = -1;
+   }
+
+   socket->has_request_in_progress = 0;
+}
+
+int JH_meta_net_write
+(
+   struct JH_meta_net socket [const restrict static 1]
+)
+{
+   const int old_errno = errno;
+   ssize_t written;
+
+   written =
+      write
+      (
+         socket->fd,
+         (socket->out.data + socket->out.index),
+         (socket->out.length - socket->out.index)
+      );
+
+   if (written <= 0)
+   {
+      if (errno == EAGAIN)
+      {
+         errno = old_errno;
+
+         return 0;
+      }
+
+      JH_ERROR
+      (
+         stderr,
+         "Unable to write to JabberHive (UNIX) socket: %s.",
+         strerror(errno)
+      );
+
+      errno = old_errno;
+
+      return -1;
+   }
+
+   errno = old_errno;
+
+   /* Move the index to track how much of the message we have sent. */
+   socket->out.index += (size_t) written;
+
+   if (socket->out.index >= socket->out.length)
+   {
+      /* Message completely sent, let's get ready for the next one. */
+      socket->out.index = 0;
+      socket->out.length = 0;
+   }
+
+   return 0;
 }

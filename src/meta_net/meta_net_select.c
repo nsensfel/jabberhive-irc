@@ -13,7 +13,11 @@ int JH_meta_net_pre_select
 )
 {
    FD_SET(socket->fd, in);
-   FD_SET(socket->fd, out);
+
+   if (socket->out.length != 0)
+   {
+      FD_SET(socket->fd, out);
+   }
 
    if ((*max_fd) < socket->fd)
    {
@@ -40,7 +44,7 @@ int JH_meta_net_post_select
       }
    }
 
-   if (FD_ISSET(socket->fd, out))
+   if ((socket->out.length != 0) && FD_ISSET(socket->fd, out))
    {
       if (JH_meta_net_write(socket) < 0)
       {

@@ -15,7 +15,7 @@ find_package(LibIRCClient REQUIRED)
 if(CMAKE_COMPILER_IS_GNUCC)
    set(CMAKE_C_FLAGS "-g -Wall -Wpedantic -Wconversion")
    #message(STATUS "GNUCC detected. Adding '-O3' parameter.")
-   #set(CMAKE_C_FLAGS "-O2")
+   #set(CMAKE_C_FLAGS "-O3")
 endif()
 
 # ${SRC_FILES} is recursively defined in the subdirectories.

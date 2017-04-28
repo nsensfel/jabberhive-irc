@@ -1,5 +1,7 @@
 #include <libircclient/libircclient.h>
 
+#include "../error/error.h"
+
 #include "../parameters/parameters.h"
 
 #include "irc.h"
@@ -18,10 +20,24 @@ void JH_irc_handle_connected_event
 
    irc = (struct JH_irc *) irc_get_ctx(session);
 
-   irc_cmd_join
+   JH_S_DEBUG(stderr, 1, "[IRC] Connected.");
+
+   if
    (
-      session,
-      JH_parameters_get_irc_channel(irc->params),
-      0
-   );
+      irc_cmd_join
+      (
+         session,
+         JH_parameters_get_irc_channel(irc->params),
+         0
+      )
+      != 0
+   )
+   {
+      JH_ERROR
+      (
+         stderr,
+         "[IRC] Unable to join: %s",
+         irc_strerror(irc_errno(session))
+      );
+   }
 }

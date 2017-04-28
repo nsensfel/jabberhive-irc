@@ -5,8 +5,13 @@
 
 struct JH_parameters
 {
+   int print_chat;
+   int print_additional_info;
+
+   /* JH **********************************************************************/
    const char * restrict socket_name;
 
+   /* IRC *********************************************************************/
    const char * server;
    const char * password;
    const char * nick;

@@ -53,6 +53,8 @@ static void set_default_to_all_fields
    struct JH_parameters param [const restrict static 1]
 )
 {
+   param->print_chat = 0;
+   param->print_additional_info = 0;
    param->socket_name = (const char *) NULL;
    param->server = (const char *) NULL;
    param->password = (const char *) NULL;
@@ -173,6 +175,22 @@ static int set_options
       )
       {
          param->use_ipv6 = 1;
+      }
+      if
+      (
+         JH_STRING_EQUALS("-c", argv[i])
+         || JH_STRING_EQUALS("--print-chat", argv[i])
+      )
+      {
+         param->print_chat = 1;
+      }
+      if
+      (
+         JH_STRING_EQUALS("-i", argv[i])
+         || JH_STRING_EQUALS("--print-additional-info", argv[i])
+      )
+      {
+         param->print_additional_info = 1;
       }
       else if
       (

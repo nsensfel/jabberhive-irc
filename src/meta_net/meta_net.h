@@ -49,7 +49,6 @@ int JH_meta_net_read
    struct JH_meta_net socket [const restrict static 1]
 );
 
-/* TODO */
 int JH_meta_net_write
 (
    struct JH_meta_net socket [const restrict static 1]

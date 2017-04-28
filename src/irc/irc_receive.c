@@ -2,6 +2,8 @@
 
 #include <libircclient/libircclient.h>
 
+#include "../parameters/parameters.h"
+
 #include "../meta_net/meta_net.h"
 
 #include "irc.h"
@@ -26,6 +28,16 @@ void JH_irc_handle_channel_message_event
       params[1],
       strlen(params[1])
    );
+
+   if (JH_parameters_get_print_chat(irc->params))
+   {
+      printf
+      (
+         "[CHAT] <%s> %s\n",
+         origin,
+         params[1]
+      );
+   }
 }
 
 void JH_irc_handle_ctcp_action_event
@@ -44,7 +56,17 @@ void JH_irc_handle_ctcp_action_event
    JH_meta_net_handle_user_action
    (
       irc->jh_net,
-      params[0],
-      strlen(params[0])
+      params[1],
+      strlen(params[1])
    );
+
+   if (JH_parameters_get_print_chat(irc->params))
+   {
+      printf
+      (
+         "[CHAT] *%s %s*\n",
+         origin,
+         params[1]
+      );
+   }
 }
