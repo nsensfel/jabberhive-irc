@@ -42,7 +42,7 @@ int JH_irc_send_message
       printf
       (
          "[CHAT] <%s> %s\n",
-         JH_parameters_get_irc_username(irc->params),
+         JH_parameters_get_irc_nick(irc->params),
          msg
       );
    }
@@ -84,7 +84,7 @@ int JH_irc_send_action
       printf
       (
          "[CHAT] *%s %s*\n",
-         JH_parameters_get_irc_username(irc->params),
+         JH_parameters_get_irc_nick(irc->params),
          msg
       );
    }

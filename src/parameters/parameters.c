@@ -176,7 +176,7 @@ static int set_options
       {
          param->use_ipv6 = 1;
       }
-      if
+      else if
       (
          JH_STRING_EQUALS("-c", argv[i])
          || JH_STRING_EQUALS("--print-chat", argv[i])
@@ -184,7 +184,7 @@ static int set_options
       {
          param->print_chat = 1;
       }
-      if
+      else if
       (
          JH_STRING_EQUALS("-i", argv[i])
          || JH_STRING_EQUALS("--print-additional-info", argv[i])
