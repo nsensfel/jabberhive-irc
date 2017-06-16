@@ -5,6 +5,7 @@
 
 struct JH_parameters
 {
+   int request_pipelining;
    int print_chat;
    int print_additional_info;
 

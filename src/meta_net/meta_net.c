@@ -123,12 +123,25 @@ int JH_meta_net_connect
    const struct JH_parameters params [const restrict static 1]
 )
 {
-   return
+   if
+   (
       open_socket
       (
          socket,
          JH_parameters_get_socket_name(params)
-      );
+      )
+      < 0
+   )
+   {
+      return -1;
+   }
+/*
+   if (JH_parameters_get_request_pipelining(params) == 1)
+   {
+      return JH_meta_net_send_ 
+   }
+*/
+   return 0;
 }
 
 void JH_meta_net_initialize

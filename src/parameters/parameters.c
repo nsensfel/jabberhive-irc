@@ -53,6 +53,7 @@ static void set_default_to_all_fields
    struct JH_parameters param [const restrict static 1]
 )
 {
+   param->request_pipelining = 0;
    param->print_chat = 0;
    param->print_additional_info = 0;
    param->socket_name = (const char *) NULL;
@@ -175,6 +176,14 @@ static int set_options
       )
       {
          param->use_ipv6 = 1;
+      }
+      else if
+      (
+         JH_STRING_EQUALS("-l", argv[i])
+         || JH_STRING_EQUALS("--request-pipelining", argv[i])
+      )
+      {
+         param->request_pipelining = 1;
       }
       else if
       (

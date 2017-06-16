@@ -1,5 +1,13 @@
 #include "parameters.h"
 
+const int JH_parameters_get_request_pipelining
+(
+   const struct JH_parameters param [const restrict static 1]
+)
+{
+   return param->request_pipelining;
+}
+
 const int JH_parameters_get_print_additional_info
 (
    const struct JH_parameters param [const restrict static 1]

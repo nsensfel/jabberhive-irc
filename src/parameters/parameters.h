@@ -10,6 +10,11 @@ int JH_parameters_initialize
    const char * argv [const static argc]
 );
 
+const int JH_parameters_get_request_pipelining
+(
+   const struct JH_parameters param [const restrict static 1]
+);
+
 const int JH_parameters_get_print_additional_info
 (
    const struct JH_parameters param [const restrict static 1]

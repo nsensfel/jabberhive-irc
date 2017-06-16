@@ -33,6 +33,9 @@ static void print_help (const char runnable [const restrict static 1])
       "   IRC_PORT:\tPort to use for the IRC connection.\n"
       "\nOptions:\n"
       "   -6, --ipv6:\tEnables IPv6.\n"
+/*
+      "   -l, --request-pipelining:\tRequests the JabberHive pipelining mode.\n"
+*/
       "   -c, --print-chat:\tDisplays IRC conversations on stdout.\n"
       "   -i, --print-additional-info:\tDisplays received JH info messages on"
       " stdout.\n"
