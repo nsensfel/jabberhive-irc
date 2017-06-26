@@ -134,6 +134,7 @@ void JH_meta_net_handle_reply
    while
    (
       (socket->in.length != 0)
+      && (socket->in.index < socket->in.length)
       && (socket->in.data[socket->in.index] == '\n')
    )
    {
