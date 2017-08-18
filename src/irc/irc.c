@@ -140,3 +140,29 @@ void JH_irc_handle_numeric_event
 )
 {
 }
+
+int JH_irc_test_connection
+(
+   struct JH_irc irc [const restrict static 1]
+)
+{
+   if
+   (
+      irc_cmd_topic
+      (
+         irc->session,
+         JH_parameters_get_irc_channel(irc->params),
+         (const char *) NULL
+      )
+      != 0
+   )
+   {
+      JH_S_ERROR(stderr, "Could not request IRC topic to test connection.");
+
+      return -1;
+   }
+
+   JH_S_DEBUG(stdout, 1, "Testing connection...");
+
+   return 0;
+}

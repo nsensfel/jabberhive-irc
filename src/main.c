@@ -106,6 +106,9 @@ static int event_handling_loop
    struct timeval tv;
    fd_set in_set, out_set;
    int fd_max, error;
+   int timeouts;
+
+   timeouts = 0;
 
    for (;;)
    {
@@ -160,6 +163,24 @@ static int event_handling_loop
             "Unable to select the sockets: %s.",
             strerror(error)
          );
+      }
+      else if (error == 0)
+      {
+         timeouts += 1;
+
+         /* 1200 timeouts => 5min */
+         if ((timeouts >= 1200) && (JH_irc_test_connection(irc) != 0))
+         {
+            JH_S_ERROR(stderr, "Timed out.");
+
+            JH_irc_finalize(irc);
+
+            return -1;
+         }
+      }
+      else
+      {
+         timeouts = 0;
       }
 
       if (JH_irc_post_select(irc, &in_set, &out_set) < 0)
