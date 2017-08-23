@@ -45,6 +45,7 @@ int JH_irc_initialize
 
    irc->params = params;
    irc->jh_net = jh_net;
+   irc->is_testing_connection = 0;
 
    if (!(irc->session))
    {
@@ -139,9 +140,34 @@ void JH_irc_handle_numeric_event
    unsigned int count
 )
 {
+   struct JH_irc * irc;
+
+   irc = irc_get_ctx(session);
+
+   if
+   (
+      (event == LIBIRC_RFC_RPL_NOTOPIC)
+      || (event == LIBIRC_RFC_RPL_TOPIC)
+   )
+   {
+      if (irc->is_testing_connection == 1)
+      {
+         JH_S_DEBUG(stdout, 1, "Connection test successful.");
+
+         irc->is_testing_connection = 0;
+      }
+   }
 }
 
-int JH_irc_test_connection
+int JH_irc_is_testing_connection
+(
+   struct JH_irc irc [const restrict static 1]
+)
+{
+   return irc->is_testing_connection;
+}
+
+int JH_irc_start_connection_test
 (
    struct JH_irc irc [const restrict static 1]
 )
@@ -162,7 +188,9 @@ int JH_irc_test_connection
       return -1;
    }
 
-   JH_S_DEBUG(stdout, 1, "Testing connection...");
+   irc->is_testing_connection = 1;
+
+   JH_S_DEBUG(stdout, 1, "Connection test started...");
 
    return 0;
 }

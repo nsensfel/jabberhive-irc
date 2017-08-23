@@ -16,7 +16,8 @@ int JH_irc_initialize
 
 int JH_irc_connect (struct JH_irc irc [const restrict static 1]);
 
-int JH_irc_test_connection (struct JH_irc irc [const restrict static 1]);
+int JH_irc_start_connection_test (struct JH_irc irc [const restrict static 1]);
+int JH_irc_is_testing_connection (struct JH_irc irc [const restrict static 1]);
 
 int JH_irc_send_message
 (

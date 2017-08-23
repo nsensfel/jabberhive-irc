@@ -9,6 +9,7 @@ struct JH_irc
    irc_session_t * session;
    const struct JH_parameters * params;
    struct JH_meta_net * jh_net;
+   int is_testing_connection;
 };
 
 #endif

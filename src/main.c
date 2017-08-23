@@ -169,25 +169,30 @@ static int event_handling_loop
          timeouts += 1;
 
          /* 1200 timeouts => 5min */
-         if ((timeouts == 1200) && (JH_irc_test_connection(irc) != 0))
+         if (timeouts >= 1200)
          {
-            JH_S_ERROR(stderr, "Timed out due to fail connection test.");
+            if (JH_irc_is_testing_connection(irc))
+            {
+               JH_S_ERROR
+               (
+                  stderr,
+                  "Timed out due to lack of response to connection test."
+               );
 
-            JH_irc_finalize(irc);
+               JH_irc_finalize(irc);
 
-            return -1;
-         }
-         else if (timeouts >= 1500)
-         {
-            JH_S_ERROR
-            (
-               stderr,
-               "Timed out due to lack of response to connection test."
-            );
+               return -1;
+            }
+            else if (JH_irc_start_connection_test(irc) < 0)
+            {
+               JH_S_ERROR(stderr, "Timed out due to failed connection test.");
 
-            JH_irc_finalize(irc);
+               JH_irc_finalize(irc);
 
-            return -1;
+               return -1;
+            }
+
+            timeouts = 0;
          }
       }
       else
