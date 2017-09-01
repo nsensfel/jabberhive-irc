@@ -1,0 +1,42 @@
+ifneq ("$(wildcard $(LIBIRCCLIENT_LIB_FLAGS))","")
+else
+## FIND INCLUDE DIR ############################################################
+POSSIBLE_DIR = \
+	/usr/include \
+	/sw/include \
+	/usr/local/include \
+	/usr/include/libircclient \
+	/sw/include/libircclient \
+	/usr/local/include/libircclient
+TARGET_CANDIDATES = $(addsuffix /libircclient.h,$(POSSIBLE_DIR))
+TARGET_FINDINGS = \
+	$(foreach candidate,$(TARGET_CANDIDATES),$(wildcard $(candidate)))
+
+
+ifeq ("$(strip $(TARGET_FINDINGS))","")
+crash:
+	$(info Looked for libircclient.h in: [$(POSSIBLE_DIR)])
+	$(error Could not find libircclient, please set LIBIRCCLIENT_LIB_FLAGS manually)
+endif
+LIBIRCCLIENT_LIB_FLAGS = $(addprefix -I,$(dir $(TARGET_FINDINGS)))
+
+## FIND LIBRARY DIR ############################################################
+POSSIBLE_DIR = \
+	/usr/lib \
+	/lib \
+	/sw/lib \
+	/usr/local/lib
+TARGET_CANDIDATES = $(addsuffix /libircclient.so,$(POSSIBLE_DIR))
+TARGET_FINDINGS = \
+	$(foreach candidate,$(TARGET_CANDIDATES),$(wildcard $(candidate)))
+
+
+ifeq ("$(strip $(TARGET_FINDINGS))","")
+crash:
+	$(info Looked for ircclient lib dir in: [$(POSSIBLE_DIR)])
+	$(error Could not find libircclient, please set LIBIRCCLIENT_LIB_FLAGS manually)
+endif
+
+LIBIRCCLIENT_LIB_FLAGS += $(addprefix -L,$(dir $(TARGET_FINDINGS)))
+LIBIRCCLIENT_LIB_FLAGS += -lircclient
+endif
