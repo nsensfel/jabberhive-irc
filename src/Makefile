@@ -10,7 +10,7 @@ build: export.a
 export.a: $(OBJ_FILES) $(SUBCOMPONENTS_EXPORT)
 	ar -crT $@ $^
 
-$(SUBCOMPONENTS_EXPORT):
+$(SUBCOMPONENTS_EXPORT): .JUST_CHECK
 	$(MAKE) -C $(dir $@) export.a
 
 clean:
@@ -26,5 +26,7 @@ clean:
 		$(CC) -M $(CPPFLAGS) $< > $@.$$$$; \
 		sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 		rm -f $@.$$$$
+
+.JUST_CHECK:
 
 include $(DEP_FILES)

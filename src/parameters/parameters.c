@@ -78,7 +78,7 @@ static int is_valid
 
    if (param->socket_name == (const char *) NULL)
    {
-      JH_S_FATAL(stderr, "Missing parameter: Zero of One socket name.");
+      JH_S_FATAL(stderr, "Missing parameter: JabberHive socket name.");
 
       valid = 0;
    }
