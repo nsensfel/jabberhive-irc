@@ -115,18 +115,21 @@ int JH_irc_connect (struct JH_irc irc [const restrict static 1])
    return 0;
 }
 
-void JH_irc_finalize (struct JH_irc irc [const restrict static 1])
+void JH_irc_finalize
+(
+   __attribute__((unused)) struct JH_irc irc [const restrict static 1]
+)
 {
    /* TODO */
 }
 
 void JH_irc_do_nothing
 (
-   irc_session_t * session,
-   const char * event,
-   const char * origin,
-   const char ** params,
-   unsigned int count
+   __attribute__((unused)) irc_session_t * session,
+   __attribute__((unused)) const char * event,
+   __attribute__((unused)) const char * origin,
+   __attribute__((unused)) const char ** params,
+   __attribute__((unused)) unsigned int count
 )
 {
 }
@@ -135,9 +138,9 @@ void JH_irc_handle_numeric_event
 (
    irc_session_t * session,
    unsigned int event,
-   const char * origin,
-   const char ** params,
-   unsigned int count
+   __attribute__((unused)) const char * origin,
+   __attribute__((unused)) const char ** params,
+   __attribute__((unused)) unsigned int count
 )
 {
    struct JH_irc * irc;

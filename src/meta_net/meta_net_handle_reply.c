@@ -8,8 +8,7 @@
 static void handle_generated_reply
 (
    struct JH_meta_net socket [const restrict static 1],
-   struct JH_irc irc [const restrict static 1],
-   const struct JH_parameters params [const restrict static 1]
+   struct JH_irc irc [const restrict static 1]
 )
 {
    if
@@ -169,7 +168,7 @@ void JH_meta_net_handle_reply
          )
       )
       {
-         handle_generated_reply(socket, irc, params);
+         handle_generated_reply(socket, irc);
       }
       else if
       (

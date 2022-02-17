@@ -133,7 +133,6 @@ static int event_handling_loop
          JH_meta_net_pre_select
          (
             socket,
-            params,
             &in_set,
             &out_set,
             &fd_max
@@ -212,7 +211,6 @@ static int event_handling_loop
          JH_meta_net_post_select
          (
             socket,
-            params,
             &in_set,
             &out_set
          ) < 0

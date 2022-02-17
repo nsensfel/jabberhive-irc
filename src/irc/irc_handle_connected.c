@@ -10,10 +10,10 @@
 void JH_irc_handle_connected_event
 (
    irc_session_t * session,
-   const char * event,
-   const char * origin,
-   const char ** params,
-   unsigned int count
+   __attribute__((unused)) const char * event,
+   __attribute__((unused)) const char * origin,
+   __attribute__((unused)) const char ** params,
+   __attribute__((unused)) unsigned int count
 )
 {
    struct JH_irc * irc;

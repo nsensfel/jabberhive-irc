@@ -1,6 +1,6 @@
 #include "parameters.h"
 
-const int JH_parameters_get_request_pipelining
+int JH_parameters_get_request_pipelining
 (
    const struct JH_parameters param [const restrict static 1]
 )
@@ -8,7 +8,7 @@ const int JH_parameters_get_request_pipelining
    return param->request_pipelining;
 }
 
-const int JH_parameters_get_print_additional_info
+int JH_parameters_get_print_additional_info
 (
    const struct JH_parameters param [const restrict static 1]
 )
@@ -16,7 +16,7 @@ const int JH_parameters_get_print_additional_info
    return param->print_additional_info;
 }
 
-const int JH_parameters_get_print_chat
+int JH_parameters_get_print_chat
 (
    const struct JH_parameters param [const restrict static 1]
 )

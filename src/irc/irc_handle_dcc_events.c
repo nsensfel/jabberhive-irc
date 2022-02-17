@@ -5,8 +5,8 @@
 void JH_irc_handle_dcc_chat_req_event
 (
    irc_session_t * session,
-   const char * nick,
-   const char * addr,
+   __attribute__((unused)) const char * nick,
+   __attribute__((unused)) const char * addr,
    irc_dcc_t dccid
 )
 {
@@ -16,10 +16,10 @@ void JH_irc_handle_dcc_chat_req_event
 void JH_irc_handle_dcc_send_req_event
 (
    irc_session_t * session,
-   const char * nick,
-   const char * addr,
-   const char * filename,
-   unsigned long size,
+   __attribute__((unused)) const char * nick,
+   __attribute__((unused)) const char * addr,
+   __attribute__((unused)) const char * filename,
+   __attribute__((unused)) unsigned long size,
    irc_dcc_t dccid
 )
 {

@@ -6,7 +6,6 @@
 int JH_meta_net_pre_select
 (
    struct JH_meta_net socket [const restrict static 1],
-   const struct JH_parameters params [const restrict static 1],
    fd_set in [const restrict static 1],
    fd_set out [const restrict static 1],
    int max_fd [const restrict static 1]
@@ -30,7 +29,6 @@ int JH_meta_net_pre_select
 int JH_meta_net_post_select
 (
    struct JH_meta_net socket [const restrict static 1],
-   const struct JH_parameters params [const restrict static 1],
    fd_set in [const restrict static 1],
    fd_set out [const restrict static 1]
 )

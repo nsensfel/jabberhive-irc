@@ -25,7 +25,11 @@ POSSIBLE_DIR = \
 	/usr/lib \
 	/lib \
 	/sw/lib \
-	/usr/local/lib
+	/usr/local/lib\
+	/usr/lib64 \
+	/lib64 \
+	/sw/lib64 \
+	/usr/local/lib64
 TARGET_CANDIDATES = $(addsuffix /libircclient.so,$(POSSIBLE_DIR))
 TARGET_FINDINGS = \
 	$(foreach candidate,$(TARGET_CANDIDATES),$(wildcard $(candidate)))
